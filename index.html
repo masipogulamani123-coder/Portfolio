@@ -106,6 +106,158 @@
             }
         }
 
+        /* Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(10, 22, 40, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--blueprint-line);
+            transition: all 0.3s ease;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80px;
+        }
+
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 24px;
+                height: 70px;
+            }
+        }
+
+        .nav-logo {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--blueprint-dark);
+            text-decoration: none;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-logo::before {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--blueprint-blue);
+            transform: rotate(45deg);
+            box-shadow: 0 0 10px var(--blueprint-blue);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 40px;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            color: var(--blueprint-steel);
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--blueprint-blue);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--blueprint-dark);
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links .nav-number {
+            color: var(--blueprint-blue);
+            margin-right: 4px;
+        }
+
+        /* Mobile Menu Toggle */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 6px;
+            cursor: pointer;
+            z-index: 1001;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 2px;
+            background: var(--blueprint-dark);
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(8px, 8px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(7px, -7px);
+        }
+
+        @media (max-width: 768px) {
+            .menu-toggle {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 70%;
+                max-width: 300px;
+                height: calc(100vh - 70px);
+                background: var(--blueprint-card-bg);
+                flex-direction: column;
+                padding: 40px 30px;
+                gap: 30px;
+                align-items: flex-start;
+                border-left: 1px solid var(--blueprint-line);
+                transition: right 0.3s ease;
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .nav-links a {
+                font-size: 14px;
+                width: 100%;
+            }
+        }
+
         /* Technical Rulers */
         .ruler {
             position: fixed;
@@ -423,7 +575,7 @@
             .profile-image-container {
                 width: 200px;
                 height: 200px;
-                margin: 0 auto 40px;
+                margin: 40px auto 40px;
                 position: relative;
                 right: auto;
                 top: auto;
@@ -1025,6 +1177,25 @@
 </head>
 
 <body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">MK</a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#skills"><span class="nav-number">01.</span> Skills</a></li>
+                <li><a href="#experience"><span class="nav-number">02.</span> Experience</a></li>
+                <li><a href="#projects"><span class="nav-number">03.</span> Projects</a></li>
+                <li><a href="#resume"><span class="nav-number">04.</span> Resume</a></li>
+                <li><a href="#contact"><span class="nav-number">05.</span> Contact</a></li>
+            </ul>
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
     <!-- Technical Rulers -->
     <div class="ruler top"></div>
     <div class="ruler left"></div>
@@ -1370,6 +1541,23 @@
             particle.style.animationDuration = (8 + Math.random() * 4) + 's';
             hero.appendChild(particle);
         }
+
+        // Mobile Menu Toggle
+        const menuToggle = document.getElementById('menuToggle');
+        const navLinks = document.getElementById('navLinks');
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Close menu when clicking on a link
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                menuToggle.classList.remove('active');
+                navLinks.classList.remove('active');
+            });
+        });
     </script>
 </body>
 
