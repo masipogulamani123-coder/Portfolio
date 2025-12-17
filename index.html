@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masipogula Mani Kumar — Civil Engineer | CAD Specialist</title>
+    <meta name="description"
+        content="Portfolio of Masipogula Mani Kumar, Civil Engineer and Junior CAD Engineer specializing in technical drafting, structural coordination, and engineering design.">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --blueprint-bg: #0A1628;
+            --blueprint-dark: #FFFFFF;
+            --blueprint-blue: #0066FF;
+            --blueprint-steel: #94A3B8;
+            --blueprint-slate: #E2E8F0;
+            --blueprint-line: #1E293B;
+            --blueprint-card-bg: #111827;
+            --blueprint-accent: #00D4FF;
+            --blueprint-cyan: #06B6D4;
+            --blueprint-gradient: linear-gradient(135deg, #0066FF 0%, #00D4FF 100%);
+            --grid-size: 20px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--blueprint-bg);
+            color: var(--blueprint-slate);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(0, 102, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(0, 212, 255, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Blueprint Grid Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                linear-gradient(var(--blueprint-line) 1px, transparent 1px),
+                linear-gradient(90deg, var(--blueprint-line) 1px, transparent 1px);
+            background-size: var(--grid-size) var(--grid-size);
+            opacity: 0.15;
+            z-index: -2;
+            pointer-events: none;
+        }
+
+        /* Drawing Lines Animation */
+        .drawing-line {
+            position: fixed;
+            background: var(--blueprint-blue);
+            opacity: 0;
+            z-index: 1000;
+            pointer-events: none;
+        }
+
+        .drawing-line.horizontal {
+            height: 2px;
+            width: 0;
+            top: 50%;
+            left: 0;
+        }
+
+        .drawing-line.vertical {
+            width: 2px;
+            height: 0;
+            left: 50%;
+            top: 0;
+        }
+
+        /* Container System */
+        .viewport {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 60px;
+            position: relative;
+        }
+
+        @media (max-width: 768px) {
+            .viewport {
+                padding: 0 24px;
+            }
+        }
+
+        /* Technical Rulers */
+        .ruler {
+            position: fixed;
+            background: var(--blueprint-line);
+            z-index: 10;
+            opacity: 0.5;
+        }
+
+        .ruler.top {
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+        }
+
+        .ruler.left {
+            top: 0;
+            left: 0;
+            width: 1px;
+            height: 100%;
+        }
+
+        /* Section Divider */
+        .section-divider {
+            position: relative;
+            margin: 120px 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--blueprint-line) 20%, var(--blueprint-line) 80%, transparent);
+        }
+
+        .section-divider::before,
+        .section-divider::after {
+            content: '';
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border: 1px solid var(--blueprint-blue);
+            background: var(--blueprint-bg);
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+            box-shadow: 0 0 10px rgba(0, 102, 255, 0.4);
+        }
+
+        .section-divider::before {
+            left: 0;
+        }
+
+        .section-divider::after {
+            right: 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            opacity: 0;
+            animation: fadeInSection 1.2s ease-out 0.8s forwards;
+            overflow: hidden;
+        }
+
+        /* Animated Particles */
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--blueprint-blue);
+            border-radius: 50%;
+            opacity: 0;
+            animation: floatParticle 8s ease-in-out infinite;
+            box-shadow: 0 0 10px var(--blueprint-blue);
+        }
+
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) translateX(0) scale(0);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.8;
+            }
+
+            90% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-100vh) translateX(100px) scale(1);
+                opacity: 0;
+            }
+        }
+
+        @keyframes fadeInSection {
+            to {
+                opacity: 1;
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            animation: slideInLeft 1s ease-out 1s backwards;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .hero-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--blueprint-steel);
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 1.2s forwards;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-label::before {
+            content: '';
+            width: 40px;
+            height: 1px;
+            background: var(--blueprint-steel);
+        }
+
+        .hero-name {
+            font-size: clamp(48px, 8vw, 96px);
+            font-weight: 700;
+            line-height: 1.1;
+            color: var(--blueprint-dark);
+            margin-bottom: 16px;
+            letter-spacing: -0.02em;
+            background: linear-gradient(135deg, var(--blueprint-dark) 0%, var(--blueprint-accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 1.4s forwards, gradientShift 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+
+            0%,
+            100% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .hero-role {
+            font-size: clamp(20px, 3vw, 32px);
+            font-weight: 300;
+            color: var(--blueprint-steel);
+            margin-bottom: 32px;
+            position: relative;
+            padding-left: 24px;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 1.6s forwards;
+        }
+
+        .hero-role::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 4px;
+            height: 60%;
+            background: var(--blueprint-gradient);
+            box-shadow: 0 0 20px rgba(0, 102, 255, 0.4);
+        }
+
+        .hero-tagline {
+            font-size: 18px;
+            max-width: 600px;
+            color: var(--blueprint-slate);
+            margin-bottom: 48px;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 1.8s forwards;
+        }
+
+        /* Profile Image */
+        .profile-image-container {
+            position: absolute;
+            right: 60px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 400px;
+            height: 400px;
+            opacity: 0;
+            animation: fadeInScale 1.2s ease-out 1.4s forwards, floatImage 6s ease-in-out infinite;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: translateY(-50%) scale(0.8);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(-50%) scale(1);
+            }
+        }
+
+        @keyframes floatImage {
+
+            0%,
+            100% {
+                transform: translateY(-50%) translateX(0);
+            }
+
+            50% {
+                transform: translateY(-55%) translateX(-10px);
+            }
+        }
+
+        .profile-frame {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        .profile-frame::before,
+        .profile-frame::after {
+            content: '';
+            position: absolute;
+            border: 1px solid var(--blueprint-steel);
+        }
+
+        .profile-frame::before {
+            top: -12px;
+            left: -12px;
+            width: 60px;
+            height: 60px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .profile-frame::after {
+            bottom: -12px;
+            right: -12px;
+            width: 60px;
+            height: 60px;
+            border-left: none;
+            border-top: none;
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border: 2px solid var(--blueprint-line);
+            filter: grayscale(20%) brightness(0.9);
+            transition: filter 0.4s ease;
+        }
+
+        .profile-image:hover {
+            filter: grayscale(0%) brightness(1);
+        }
+
+        @media (max-width: 1024px) {
+            .profile-image-container {
+                position: relative;
+                right: auto;
+                top: auto;
+                transform: none;
+                width: 300px;
+                height: 300px;
+                margin: 48px auto;
+            }
+        }
+
+        /* Action Buttons */
+        .hero-actions {
+            display: flex;
+            gap: 24px;
+            flex-wrap: wrap;
+            opacity: 0;
+            animation: fadeInUp 0.8s ease-out 2s forwards;
+        }
+
+        .btn {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 16px 32px;
+            border: 2px solid var(--blueprint-blue);
+            background: transparent;
+            color: var(--blueprint-dark);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            text-decoration: none;
+            display: inline-block;
+            font-weight: 500;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: var(--blueprint-gradient);
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .btn:hover {
+            color: white;
+            border-color: var(--blueprint-accent);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 102, 255, 0.3);
+        }
+
+        .btn:hover::before {
+            width: 100%;
+        }
+
+        .btn.primary {
+            background: var(--blueprint-gradient);
+            color: white;
+            border-color: var(--blueprint-blue);
+            box-shadow: 0 4px 20px rgba(0, 102, 255, 0.3);
+        }
+
+        .btn.primary::before {
+            background: linear-gradient(135deg, #00D4FF 0%, #0066FF 100%);
+        }
+
+        .btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 40px rgba(0, 102, 255, 0.5);
+        }
+
+        /* Section Headers */
+        .section {
+            margin: 160px 0;
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+
+        .section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-header {
+            margin-bottom: 80px;
+            position: relative;
+        }
+
+        .section-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            color: var(--blueprint-blue);
+            margin-bottom: 8px;
+        }
+
+        .section-title {
+            font-size: clamp(36px, 5vw, 56px);
+            font-weight: 600;
+            color: var(--blueprint-dark);
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 80px;
+            height: 4px;
+            background: var(--blueprint-gradient);
+            box-shadow: 0 2px 10px rgba(0, 102, 255, 0.4);
+        }
+
+        /* Skills System */
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .skill-category {
+            position: relative;
+            padding: 32px;
+            border: 1px solid var(--blueprint-line);
+            background: var(--blueprint-card-bg);
+            transition: all 0.3s ease;
+        }
+
+        .skill-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--blueprint-gradient);
+            transition: width 0.4s ease;
+            box-shadow: 0 0 15px rgba(0, 102, 255, 0.5);
+        }
+
+        .skill-category:hover {
+            border-color: var(--blueprint-blue);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 102, 255, 0.15);
+        }
+
+        .skill-category:hover::before {
+            width: 100%;
+        }
+
+        .skill-category-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--blueprint-dark);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .skill-category-icon {
+            width: 24px;
+            height: 24px;
+            stroke: var(--blueprint-blue);
+            stroke-width: 2;
+            fill: none;
+        }
+
+        .skill-list {
+            list-style: none;
+        }
+
+        .skill-list li {
+            padding: 8px 0;
+            color: var(--blueprint-slate);
+            font-size: 15px;
+            position: relative;
+            padding-left: 20px;
+        }
+
+        .skill-list li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 6px;
+            height: 6px;
+            border: 1px solid var(--blueprint-blue);
+            background: transparent;
+            transform: translateY(-50%) rotate(45deg);
+        }
+
+        /* Experience Timeline */
+        .experience-timeline {
+            position: relative;
+            padding-left: 60px;
+        }
+
+        .experience-timeline::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 2px;
+            height: 100%;
+            background: var(--blueprint-line);
+        }
+
+        .experience-item {
+            position: relative;
+            margin-bottom: 60px;
+            padding: 32px;
+            border: 1px solid var(--blueprint-line);
+            background: var(--blueprint-card-bg);
+            transition: all 0.3s ease;
+        }
+
+        .experience-item::before {
+            content: '';
+            position: absolute;
+            left: -60px;
+            top: 40px;
+            width: 12px;
+            height: 12px;
+            border: 2px solid var(--blueprint-blue);
+            background: var(--blueprint-card-bg);
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0, 102, 255, 0.6);
+        }
+
+        .experience-item::after {
+            content: '';
+            position: absolute;
+            left: -54px;
+            top: 46px;
+            width: 54px;
+            height: 1px;
+            background: var(--blueprint-line);
+        }
+
+        .experience-item:hover {
+            border-color: var(--blueprint-blue);
+            transform: translateX(8px);
+            box-shadow: 0 8px 30px rgba(0, 102, 255, 0.15);
+        }
+
+        .experience-header {
+            margin-bottom: 16px;
+        }
+
+        .experience-role {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--blueprint-dark);
+            margin-bottom: 8px;
+        }
+
+        .experience-company {
+            font-size: 16px;
+            color: var(--blueprint-blue);
+            margin-bottom: 4px;
+        }
+
+        .experience-period {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--blueprint-steel);
+            letter-spacing: 1px;
+        }
+
+        .experience-description {
+            color: var(--blueprint-slate);
+            line-height: 1.8;
+            margin-top: 16px;
+        }
+
+        .experience-highlights {
+            list-style: none;
+            margin-top: 16px;
+        }
+
+        .experience-highlights li {
+            padding: 6px 0;
+            padding-left: 24px;
+            position: relative;
+            color: var(--blueprint-slate);
+            font-size: 15px;
+        }
+
+        .experience-highlights li::before {
+            content: '→';
+            position: absolute;
+            left: 0;
+            color: var(--blueprint-blue);
+        }
+
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .project-card {
+            position: relative;
+            padding: 40px;
+            border: 1px solid var(--blueprint-line);
+            background: var(--blueprint-card-bg);
+            transition: all 0.4s ease;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: -1px;
+            right: -1px;
+            bottom: -1px;
+            background: var(--blueprint-gradient);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+            z-index: -1;
+        }
+
+        .project-card:hover {
+            transform: translateY(-12px);
+            box-shadow: 0 20px 60px rgba(0, 102, 255, 0.2);
+            border-color: transparent;
+        }
+
+        .project-card:hover::before {
+            opacity: 0.05;
+        }
+
+        .project-number {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--blueprint-steel);
+            margin-bottom: 16px;
+        }
+
+        .project-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--blueprint-dark);
+            margin-bottom: 16px;
+        }
+
+        .project-process {
+            list-style: none;
+            margin-top: 24px;
+        }
+
+        .project-process li {
+            padding: 12px 0;
+            padding-left: 32px;
+            position: relative;
+            color: var(--blueprint-slate);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        .project-process li::before {
+            content: attr(data-step);
+            position: absolute;
+            left: 0;
+            top: 12px;
+            width: 20px;
+            height: 20px;
+            border: 1px solid var(--blueprint-blue);
+            background: var(--blueprint-card-bg);
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--blueprint-blue);
+        }
+
+        /* Resume Section */
+        .resume-section {
+            text-align: center;
+            padding: 80px 0;
+            background: var(--blueprint-card-bg);
+            border: 1px solid var(--blueprint-line);
+            position: relative;
+            box-shadow: 0 4px 30px rgba(0, 102, 255, 0.1);
+        }
+
+        .resume-section::before,
+        .resume-section::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 1px;
+            background: var(--blueprint-line);
+            top: 0;
+        }
+
+        .resume-section::before {
+            left: 0;
+        }
+
+        .resume-section::after {
+            right: 0;
+        }
+
+        .resume-title {
+            font-size: 32px;
+            font-weight: 600;
+            color: var(--blueprint-dark);
+            margin-bottom: 16px;
+        }
+
+        .resume-subtitle {
+            font-size: 16px;
+            color: var(--blueprint-steel);
+            margin-bottom: 40px;
+        }
+
+        .resume-actions {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Contact Section */
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 32px;
+            margin-top: 60px;
+        }
+
+        .contact-item {
+            padding: 24px;
+            border: 1px solid var(--blueprint-line);
+            background: var(--blueprint-card-bg);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .contact-item:hover {
+            border-color: var(--blueprint-blue);
+            transform: translateY(-6px);
+            box-shadow: 0 8px 25px rgba(0, 102, 255, 0.15);
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.02), rgba(0, 212, 255, 0.02));
+        }
+
+        .contact-label {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--blueprint-steel);
+            margin-bottom: 12px;
+        }
+
+        .contact-value {
+            font-size: 16px;
+            color: var(--blueprint-dark);
+            word-break: break-word;
+        }
+
+        .contact-value a {
+            color: var(--blueprint-blue);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-value a:hover {
+            color: var(--blueprint-accent);
+            text-decoration: underline;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 160px;
+            padding: 40px 0;
+            border-top: 1px solid var(--blueprint-line);
+            text-align: center;
+            color: var(--blueprint-steel);
+            font-size: 14px;
+        }
+
+        /* Scroll Indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: var(--blueprint-gradient);
+            z-index: 1000;
+            transition: width 0.1s ease;
+            box-shadow: 0 2px 20px rgba(0, 102, 255, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Technical Rulers -->
+    <div class="ruler top"></div>
+    <div class="ruler left"></div>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-indicator" id="scrollIndicator"></div>
+
+    <!-- Drawing Lines (Animation) -->
+    <div class="drawing-line horizontal" id="drawLineH"></div>
+    <div class="drawing-line vertical" id="drawLineV"></div>
+
+    <div class="viewport">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <div class="hero-label">
+                    <span>PORTFOLIO 2024</span>
+                </div>
+                <h1 class="hero-name">MASIPOGULA<br>MANI KUMAR</h1>
+                <div class="hero-role">Civil Engineer | Junior CAD Engineer</div>
+                <p class="hero-tagline">
+                    Entry-level Civil Engineer with practical exposure to AutoCAD-based drafting and SketchUp 3D
+                    modelling.
+                    Trained in preparing architectural drawings, basic structural layouts, and working drawings.
+                </p>
+                <div class="hero-actions">
+                    <a href="#contact" class="btn primary">Get In Touch</a>
+                    <a href="#projects" class="btn">View Work</a>
+                </div>
+            </div>
+
+            <div class="profile-image-container">
+                <div class="profile-frame">
+                    <img src="image.jpg" alt="Masipogula Mani Kumar" class="profile-image" id="profileImage">
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Skills Section -->
+        <section class="section" id="skills">
+            <div class="section-header">
+                <div class="section-number">01 — TECHNICAL SYSTEMS</div>
+                <h2 class="section-title">Skills & Expertise</h2>
+            </div>
+
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3 class="skill-category-title">
+                        <svg class="skill-category-icon" viewBox="0 0 24 24">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <line x1="9" y1="3" x2="9" y2="21" />
+                            <line x1="15" y1="3" x2="15" y2="21" />
+                            <line x1="3" y1="9" x2="21" y2="9" />
+                            <line x1="3" y1="15" x2="21" y2="15" />
+                        </svg>
+                        CAD & Design Tools
+                    </h3>
+                    <ul class="skill-list">
+                        <li>AutoCAD (2D Drafting, Layouts)</li>
+                        <li>SketchUp (3D Modelling)</li>
+                        <li>V-Ray (Basic Rendering)</li>
+                        <li>Revit Architecture (Basic Workflow)</li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h3 class="skill-category-title">
+                        <svg class="skill-category-icon" viewBox="0 0 24 24">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                            <path d="M2 17l10 5 10-5" />
+                            <path d="M2 12l10 5 10-5" />
+                        </svg>
+                        Engineering Knowledge
+                    </h3>
+                    <ul class="skill-list">
+                        <li>Plans, Elevations & Sections</li>
+                        <li>Basic Column & Beam Layout</li>
+                        <li>Working Drawings</li>
+                        <li>BOQ Support</li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h3 class="skill-category-title">
+                        <svg class="skill-category-icon" viewBox="0 0 24 24">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg>
+                        Technical Competencies
+                    </h3>
+                    <ul class="skill-list">
+                        <li>Teamwork & Collaboration</li>
+                        <li>Problem Solving</li>
+                        <li>Communication Skills</li>
+                        <li>Attention to Detail</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Experience Section -->
+        <section class="section" id="experience">
+            <div class="section-header">
+                <div class="section-number">02 — PROFESSIONAL PROCESS</div>
+                <h2 class="section-title">Experience</h2>
+            </div>
+
+            <div class="experience-timeline">
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <h3 class="experience-role">CAD Desk Trainee</h3>
+                        <div class="experience-company">Bhavanam's C2C Pvt. Ltd, Hyderabad</div>
+                        <div class="experience-period">INTERNSHIP</div>
+                    </div>
+                    <p class="experience-description">
+                        Gained hands-on experience in architectural drafting and 3D modelling for residential projects,
+                        working with industry-standard CAD tools and rendering software.
+                    </p>
+                    <ul class="experience-highlights">
+                        <li>Prepared 2D architectural drawings using AutoCAD</li>
+                        <li>Developed residential 3D models in SketchUp</li>
+                        <li>Assisted in file management and drawing coordination</li>
+                        <li>Applied basic rendering using V-Ray</li>
+                    </ul>
+                </div>
+
+                <div class="experience-item">
+                    <div class="experience-header">
+                        <h3 class="experience-role">AutoCAD & Revit Architecture Intern</h3>
+                        <div class="experience-company">CDST Informatics (P) Limited (Online)</div>
+                        <div class="experience-period">ONLINE INTERNSHIP</div>
+                    </div>
+                    <p class="experience-description">
+                        Completed online training focused on architectural drafting standards and BIM workflow,
+                        developing proficiency in industry-standard design software.
+                    </p>
+                    <ul class="experience-highlights">
+                        <li>Drafted floor plans, elevations, and sections</li>
+                        <li>Created blocks, text styles, and dimensions</li>
+                        <li>Practiced basic Revit architectural workflow</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Projects Section -->
+        <section class="section" id="projects">
+            <div class="section-header">
+                <div class="section-number">03 — CASE STUDIES</div>
+                <h2 class="section-title">Selected Projects</h2>
+            </div>
+
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-number">PROJECT 01</div>
+                    <h3 class="project-title">Residential Building Drafting & 3D Modelling</h3>
+                    <ul class="project-process">
+                        <li data-step="1">Prepared comprehensive AutoCAD plans, elevations, and sections for residential
+                            building design</li>
+                        <li data-step="2">Converted 2D architectural drawings into detailed 3D models using SketchUp for
+                            visualization</li>
+                        <li data-step="3">Delivered complete drawing set with accurate dimensions and architectural
+                            details</li>
+                    </ul>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-number">PROJECT 02</div>
+                    <h3 class="project-title">Architectural Layout & Working Drawings</h3>
+                    <ul class="project-process">
+                        <li data-step="1">Developed detailed layout drawings with proper annotations and dimension
+                            standards</li>
+                        <li data-step="2">Practiced basic column and beam layout coordination for structural integration
+                        </li>
+                        <li data-step="3">Created working drawings suitable for construction documentation and
+                            coordination</li>
+                    </ul>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-number">PROJECT 03</div>
+                    <h3 class="project-title">CAD Training & Certification Projects</h3>
+                    <ul class="project-process">
+                        <li data-step="1">Completed Professional Diploma in Civil CAD covering AutoCAD Civil, SketchUp,
+                            and V-Ray</li>
+                        <li data-step="2">Earned AutoCAD and Revit Architecture certifications through structured
+                            training programs</li>
+                        <li data-step="3">Applied learned skills in real-world drafting scenarios during industrial
+                            training</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Resume Section -->
+        <section class="section" id="resume">
+            <div class="resume-section">
+                <h2 class="resume-title">Professional Documentation</h2>
+                <p class="resume-subtitle">Download my complete resume</p>
+                <div class="resume-actions">
+                    <a href="resume.pdf" download class="btn primary">Download Resume (PDF)</a>
+                </div>
+            </div>
+        </section>
+
+        <div class="section-divider"></div>
+
+        <!-- Contact Section -->
+        <section class="section" id="contact">
+            <div class="section-header">
+                <div class="section-number">04 — CONNECT</div>
+                <h2 class="section-title">Get In Touch</h2>
+            </div>
+
+            <div class="contact-grid">
+                <div class="contact-item">
+                    <div class="contact-label">Email</div>
+                    <div class="contact-value">
+                        <a href="mailto:manikumar.engineer999@gmail.com">manikumar.engineer999@gmail.com</a>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-label">Phone</div>
+                    <div class="contact-value">
+                        <a href="tel:+919110352135">+91 91103 52135</a>
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-label">Education</div>
+                    <div class="contact-value">
+                        B.Tech Civil Engineering (2022-2025)<br>Diploma Civil Engineering (CGPA 8.0)
+                    </div>
+                </div>
+
+                <div class="contact-item">
+                    <div class="contact-label">Location</div>
+                    <div class="contact-value">Ameerpet, Hyderabad</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2024 Masipogula Mani Kumar. Designed & Engineered with Precision.</p>
+        </footer>
+    </div>
+
+    <script>
+        // Drawing Animation on Load
+        window.addEventListener('load', () => {
+            const lineH = document.getElementById('drawLineH');
+            const lineV = document.getElementById('drawLineV');
+
+            // Horizontal line animation
+            lineH.style.opacity = '1';
+            lineH.style.transition = 'width 0.8s ease';
+            lineH.style.width = '100%';
+
+            // Vertical line animation (delayed)
+            setTimeout(() => {
+                lineV.style.opacity = '1';
+                lineV.style.transition = 'height 0.8s ease';
+                lineV.style.height = '100%';
+            }, 400);
+
+            // Fade out lines
+            setTimeout(() => {
+                lineH.style.transition = 'opacity 0.6s ease';
+                lineV.style.transition = 'opacity 0.6s ease';
+                lineH.style.opacity = '0';
+                lineV.style.opacity = '0';
+            }, 1600);
+        });
+
+        // Scroll Progress Indicator
+        window.addEventListener('scroll', () => {
+            const scrollIndicator = document.getElementById('scrollIndicator');
+            const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (window.scrollY / windowHeight) * 100;
+            scrollIndicator.style.width = scrolled + '%';
+        });
+
+        // Intersection Observer for Section Animations
+        const sections = document.querySelectorAll('.section');
+
+        const observerOptions = {
+            threshold: 0.15,
+            rootMargin: '0px 0px -100px 0px'
+        };
+
+        const sectionObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            sectionObserver.observe(section);
+        });
+
+        // Smooth Scroll for Anchor Links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Profile Image Fallback
+        const profileImg = document.getElementById('profileImage');
+        profileImg.addEventListener('error', function () {
+            // Create a placeholder SVG if image fails to load
+            const placeholder = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'%3E%3Crect fill='%23f1f5f9' width='400' height='400'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='Inter, sans-serif' font-size='120' font-weight='700' fill='%23334155'%3EMK%3C/text%3E%3C/svg%3E`;
+            this.src = placeholder;
+        });
+
+        // Generate Floating Particles
+        const hero = document.querySelector('.hero');
+        const particleCount = 15;
+
+        for (let i = 0; i < particleCount; i++) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.style.left = Math.random() * 100 + '%';
+            particle.style.animationDelay = Math.random() * 8 + 's';
+            particle.style.animationDuration = (8 + Math.random() * 4) + 's';
+            hero.appendChild(particle);
+        }
+    </script>
+</body>
+
+</html>
