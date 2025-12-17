@@ -414,15 +414,25 @@
         }
 
         @media (max-width: 768px) {
-            .profile-image-container {
-                width: 250px;
-                height: 250px;
-                margin: 40px auto 0;
-            }
-
             .hero {
                 min-height: auto;
-                padding: 80px 0 60px;
+                padding: 60px 0 60px;
+                flex-direction: column-reverse;
+                align-items: stretch;
+            }
+
+            .profile-image-container {
+                width: 200px;
+                height: 200px;
+                margin: 0 auto 40px;
+                position: relative;
+                right: auto;
+                top: auto;
+                transform: none;
+            }
+
+            .hero-content {
+                max-width: 100%;
             }
 
             .hero-name {
